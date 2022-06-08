@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="row">
+    <div class="row ms-3 mt-3">
       <!-- Result List -->
       <div class="col-none d-lg-block d-none col-lg-8 row">
         <div class="panel panel-primary" id="result_panel">
