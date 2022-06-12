@@ -9,11 +9,14 @@
           </div>
           <div class="panel-body col-11">
             <ul ref="resultList" class="list-group">
-              <template v-for="(result, index) in ResultArr" :key="index">
-                <li class="list-group-item" @click="SetStatement(result[0])">
-                  <a class="resultItem">{{ result[0] }} = {{ result[1] }}</a>
-                </li>
-              </template>
+              <li
+                class="list-group-item"
+                @click="SetStatement(result[0])"
+                v-for="(result, index) in ResultArr"
+                :key="index"
+              >
+                <a class="resultItem">{{ result[0] }} = {{ result[1] }}</a>
+              </li>
             </ul>
           </div>
         </div>
@@ -26,52 +29,44 @@
         <div class="row p-0">
           <div class="col-9 p-0">
             <!-- "(", ")", "%" -->
-            <template v-for="(func, index) in OtherFunc2Arr" :key="index">
-              <button
-                type="button"
-                class="btn btn-info col-4 shadow"
-                @click="FuncBtnClick(func)"
-              >
-                {{ func }}
-              </button>
-            </template>
+            <button
+              v-for="(func, index) in OtherFunc2Arr"
+              :key="index"
+              type="button"
+              class="btn btn-info col-4 shadow"
+              @click="FuncBtnClick(func)"
+            >
+              {{ func }}
+            </button>
             <!-- [0 - 9] -->
-            <template v-for="(num, index) in NumPadArr" :key="index">
-              <button
-                class="btn btn-secondary col-4 shadow"
-                @click="NumBtnClick(num)"
-              >
-                {{ num }}
-              </button>
-            </template>
+            <button
+              v-for="(num, index) in NumPadArr"
+              :key="index"
+              class="btn btn-secondary col-4 shadow"
+              @click="NumBtnClick(num)"
+            >
+              {{ num }}
+            </button>
             <!-- ".", "=" -->
-            <template v-for="(func, index) in OtherFuncArr" :key="index">
-              <button
-                class="btn btn-info col-4 shadow"
-                @click="FuncBtnClick(func)"
-              >
-                {{ func }}
-              </button>
-            </template>
+            <button
+              v-for="(func, index) in OtherFuncArr"
+              :key="index"
+              class="btn btn-info col-4 shadow"
+              @click="FuncBtnClick(func)"
+            >
+              {{ func }}
+            </button>
           </div>
           <!-- "AC", "/", "*", "-", "+" -->
           <div class="col-3 p-0">
-            <template v-for="(func, index) in FuncPadArr" :key="index">
-              <button
-                class="btn btn-danger col-12 shadow"
-                @click="FuncBtnClick(func)"
-                v-if="func === 'AC'"
-              >
-                {{ func }}
-              </button>
-              <button
-                class="btn btn-info col-12 shadow"
-                @click="FuncBtnClick(func)"
-                v-else
-              >
-                {{ func }}
-              </button>
-            </template>
+            <button
+              v-for="(func, index) in FuncPadArr"
+              :key="index"
+              class="btn btn-danger col-12 shadow {func == 'AC' ? 'btn-danger' : 'btn-info'}"
+              @click="FuncBtnClick(func)"
+            >
+              {{ func }}
+            </button>
           </div>
         </div>
       </div>
