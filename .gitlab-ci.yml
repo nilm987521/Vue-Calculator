@@ -1,36 +1,19 @@
-# Node.js 版本
-image: node:18
-
 # 定義階段
 stages:
-  - setup
   - check
   - build
   - deploy
 
-# 全局變量
-variables:
-  YARN_CACHE_FOLDER: ".yarn-cache"
 
-# 全局快取配置
-cache:
-  key: ${CI_COMMIT_REF_SLUG}-yarn
-  paths:
-    - .yarn-cache/
-    - node_modules/
-  policy: pull-push
+default:
+  image: node:18
+  cache:  # Cache modules in between jobs
+    key: $CI_COMMIT_REF_SLUG
+    paths:
+      - .npm/
+  before_script:
+    - npm ci --cache .npm --prefer-offline
 
-# 安裝依賴階段
-setup:
-  stage: setup
-  script:
-    - bash convert-to-yarn.sh 
-    - echo "確認 Yarn 版本..."
-    - yarn --version
-    - echo "安裝項目依賴..."
-    - yarn install --frozen-lockfile --cache-folder $YARN_CACHE_FOLDER
-    - echo "安裝完成，依賴已緩存"
-  
 # 檢查階段
 check:
   stage: check
@@ -38,9 +21,9 @@ check:
     - setup
   script:
     - echo "執行格式檢查..."
-    - yarn prettier --check "src/**/*.{js,vue}"
+    - npm prettier --check "src/**/*.{js,vue}"
     - echo "執行代碼規則檢查..."
-    - yarn run lint
+    - npm run lint
 
 # 構建階段
 build:
@@ -49,7 +32,7 @@ build:
     - check
   script:
     - echo "構建應用..."
-    - yarn build
+    - npm build
   artifacts:
     paths:
       - public/
