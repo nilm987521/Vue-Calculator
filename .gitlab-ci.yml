@@ -7,25 +7,41 @@ stages:
   - build
   - deploy
 
-# 快取 node_modules 目錄以加速構建
+# 全局快取配置
 cache:
+  key: ${CI_COMMIT_REF_SLUG}
   paths:
     - node_modules/
+  policy: pull-push
 
+# 規則檢查
 check:
   stage: check
   script:
     - npm ci # 使用 ci(clean install) 而不是 install 以確保一致性安裝
     - npx prettier --check "**/*.{js,vue}"
     - npm run lint
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - node_modules/
+    policy: pull-push
+
 # 構建階段的工作
 build:
   stage: build
+  needs:
+    - check
   script:
     - npm run build
   artifacts:
     paths:
       - public/ # Vite 構建後的輸出目錄
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - node_modules/
+    policy: pull
 
 # 部署到 GitLab Pages 的工作
 pages:
