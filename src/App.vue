@@ -29,44 +29,17 @@
         <div class="row p-0">
           <div class="col-9 p-0">
             <!-- "(", ")", "%" -->
-            <button
-              v-for="(func, index) in OtherFunc2Arr"
-              :key="index"
-              type="button"
-              class="btn btn-info col-4 shadow"
-              @click="FuncBtnClick(func)"
-            >
-              {{ func }}
-            </button>
+            <BracketPad @click-function="FuncBtnClick" />
+            
             <!-- [0 - 9] -->
-            <button
-              v-for="(num, index) in NumPadArr"
-              :key="index"
-              class="btn btn-secondary col-4 shadow"
-              @click="NumBtnClick(num)"
-            >
-              {{ num }}
-            </button>
+            <NumberPad @click-number="NumBtnClick" />
+            
             <!-- ".", "=" -->
-            <button
-              v-for="(func, index) in OtherFuncArr"
-              :key="index"
-              class="btn btn-info col-4 shadow"
-              @click="FuncBtnClick(func)"
-            >
-              {{ func }}
-            </button>
+            <EqualPad @click-function="FuncBtnClick" />
           </div>
           <!-- "AC", "/", "*", "-", "+" -->
           <div class="col-3 p-0">
-            <button
-              v-for="(func, index) in FuncPadArr"
-              :key="index"
-              class="btn btn-danger col-12 shadow {func == 'AC' ? 'btn-danger' : 'btn-info'}"
-              @click="FuncBtnClick(func)"
-            >
-              {{ func }}
-            </button>
+            <OperatorPad @click-function="FuncBtnClick" />
           </div>
         </div>
       </div>
@@ -77,14 +50,21 @@
 <script>
 import { ref } from "vue";
 import { Decimal } from "decimal.js";
+import NumberPad from "./components/NumberPad.vue";
+import BracketPad from "./components/BracketPad.vue";
+import OperatorPad from "./components/OperatorPad.vue";
+import EqualPad from "./components/EqualPad.vue";
+
 export default {
   name: "CalculatorApp",
+  components: {
+    NumberPad,
+    BracketPad,
+    OperatorPad,
+    EqualPad
+  },
   setup() {
     // variables
-    const OtherFunc2Arr = ["(", ")", "%"];
-    const NumPadArr = [7, 8, 9, 4, 5, 6, 1, 2, 3, 0];
-    const FuncPadArr = ["AC", "÷", "×", "-", "+"];
-    const OtherFuncArr = [".", "="];
     const Statement = ref("0");
     var HasGetResult = false;
     const ResultArr = ref([]);
@@ -272,10 +252,6 @@ export default {
 
     // Vue return
     return {
-      NumPadArr,
-      FuncPadArr,
-      OtherFuncArr,
-      OtherFunc2Arr,
       Statement,
       NumBtnClick,
       FuncBtnClick,
@@ -288,13 +264,6 @@ export default {
 </script>
 
 <style scoped>
-button {
-  border: 5px solid #fff;
-  border-radius: 30px;
-  padding: 15px;
-  font-size: 20px;
-}
-
 #statement {
   padding: 20px;
   border-radius: 18px;
