@@ -41,7 +41,12 @@ pages:
   needs:
     - build
   script:
-    - echo "部署到 GitLab Pages..."
+    - echo "GitLab Pages 域名: $CI_PAGES_DOMAIN"
+    - echo "GitLab Pages URL: $CI_PAGES_URL"
+    - echo "項目 URL: $CI_PROJECT_URL"
+    # 確保 public 目錄存在且包含 index.html
+    - ls -la public/
+    - if [ ! -f "public/index.html" ]; then echo "Error: public/index.html not found!"; exit 1; fi
   artifacts:
     paths:
       - public/

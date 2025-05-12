@@ -1,19 +1,33 @@
 <template>
   <div class="container">
-    <div class="row ms-3 mt-3">
-      <!-- Result List -->
-      <div class="col-none d-lg-block d-none col-lg-8 row">
-        <div class="panel panel-primary" id="result_panel">
+    <div class="row mt-3">
+      <!-- 小螢幕上的歷史記錄按鈕 -->
+      <div class="col-12 d-lg-none mb-2">
+        <button
+          class="btn btn-info history-toggle-btn"
+          @click="toggleHistory"
+          :class="{ active: showHistoryOnMobile }"
+        >
+          <i class="bi bi-clock-history"></i> {{ showHistoryOnMobile ? '隱藏歷史' : '查看歷史' }}
+        </button>
+      </div>
+
+      <!-- 小螢幕上的可切換歷史記錄 -->
+      <div class="col-12 history-mobile d-lg-none" :class="{ show: showHistoryOnMobile }">
+        <div class="panel panel-primary" id="result_panel_mobile">
           <div class="panel-heading">
-            <h1 class="panel-default">Result List</h1>
+            <h2 class="panel-default">Result History</h2>
           </div>
-          <div class="panel-body col-11">
-            <ul ref="resultList" class="list-group">
+          <div class="panel-body">
+            <ul class="list-group">
               <li
                 class="list-group-item"
-                @click="SetStatement(result[0])"
+                @click="
+                  SetStatement(result[0]);
+                  toggleHistory();
+                "
                 v-for="(result, index) in ResultArr"
-                :key="index"
+                :key="`mobile-${index}`"
               >
                 <a class="resultItem">{{ result[0] }} = {{ result[1] }}</a>
               </li>
@@ -21,8 +35,30 @@
           </div>
         </div>
       </div>
-      <!-- Calculator -->
-      <div class="col-12 col-lg-4 cal shadow-lg justify-content-center">
+
+      <!-- 大螢幕上的歷史記錄（原來的） -->
+      <div class="col-lg-8 d-none d-lg-block">
+        <div class="panel panel-primary" id="result_panel">
+          <div class="panel-heading">
+            <h1 class="panel-default">Result History</h1>
+          </div>
+          <div class="panel-body col-11">
+            <ul ref="resultList" class="list-group">
+              <li
+                class="list-group-item"
+                @click="SetStatement(result[0])"
+                v-for="(result, index) in ResultArr"
+                :key="`desktop-${index}`"
+              >
+                <a class="resultItem">{{ result[0] }} = {{ result[1] }}</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 計算機 -->
+      <div class="col-12 col-lg-4 cal shadow-lg mx-auto">
         <div class="row p-2">
           <input class="col-12 shadow" id="statement" v-model="Statement" />
         </div>
@@ -68,6 +104,12 @@ export default {
     const Statement = ref('0');
     var HasGetResult = false;
     const ResultArr = ref([]);
+    const showHistoryOnMobile = ref(false);
+
+    // 切換歷史記錄顯示狀態
+    const toggleHistory = () => {
+      showHistoryOnMobile.value = !showHistoryOnMobile.value;
+    };
 
     // Regex
     const PairReg = /\((-?\d+\.?\d*%?([×÷*/+-]?\d+\.?\d*%?)*)\)/;
@@ -249,6 +291,8 @@ export default {
       HasGetResult,
       SetStatement,
       ResultArr,
+      showHistoryOnMobile,
+      toggleHistory,
     };
   },
 };
@@ -259,23 +303,78 @@ export default {
   padding: 20px;
   border-radius: 18px;
 }
+
+/* 歷史記錄樣式（共用） */
 .list-group {
   max-height: 420px;
   overflow-y: scroll;
   margin-bottom: 10px;
   -webkit-overflow-scrolling: touch;
 }
+
 .panel-primary {
   margin-top: 5px;
   padding-top: 10px;
   text-align: left;
 }
+
 .panel-default {
   padding-left: 10px;
   padding-top: 10px;
   padding-bottom: 20px;
   border-radius: 10px;
 }
+
+.list-group-item:hover {
+  font-weight: bold;
+  background-color: #f1f1f1;
+  cursor: pointer;
+}
+
+.resultItem {
+  color: #000;
+  text-decoration: none;
+  display: block;
+  width: 100%;
+}
+
+/* 小螢幕上的歷史記錄專用樣式 */
+.history-mobile {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease-in-out;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.history-mobile.show {
+  max-height: 300px;
+  border: 1px solid #ddd;
+}
+
+.history-toggle-btn {
+  width: 100%;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  transition: all 0.3s;
+}
+
+.history-toggle-btn.active {
+  background-color: #0dcaf0;
+  color: white;
+}
+
+.history-toggle-btn:hover {
+  background-color: #0dcaf0;
+  color: white;
+}
+
+#result_panel_mobile {
+  padding: 10px;
+}
+
+/* 計算機樣式 */
 .cal {
   border-radius: 10px;
   border: 1px solid #000;
@@ -283,30 +382,32 @@ export default {
   padding: 30px;
   max-width: 320px;
 }
-.list-group-item:hover {
-  font-weight: bold;
-}
-.resultItem {
-  color: #000;
-  text-decoration: none;
-}
-/* width */
+
+/* 滾動條樣式 */
 ::-webkit-scrollbar {
   width: 10px;
 }
 
-/* Track */
 ::-webkit-scrollbar-track {
   background: #f1f1f1;
 }
 
-/* Handle */
 ::-webkit-scrollbar-thumb {
   background: #888;
 }
 
-/* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+
+/* 確保在行動裝置上有足夠邊距 */
+@media (max-width: 767px) {
+  .container {
+    padding: 0 10px;
+  }
+
+  .cal {
+    margin: 10px auto;
+  }
 }
 </style>

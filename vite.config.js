@@ -35,5 +35,5 @@ export default defineConfig({
     sourcemap: false,
     cssCodeSplit: false,
   },
-  base: './',
+  base: process.env.NODE_ENV === 'production' ? '/vue-calculator/' : './',
 });
