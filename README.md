@@ -6,6 +6,8 @@
 ![License](https://img.shields.io/badge/License-MIT-blue.svg)
 
 一個使用 Vue 3 和 Vite 構建的現代化計算器應用，具有計算歷史記錄功能和精確的數學運算。
+[Demo](http://daniel.pages.nilm.cc/vue-calculator)
+![thumbnail](img/thumbnail.jpg)
 
 <p align="center">
   <img src="https://via.placeholder.com/600x400?text=Vue+Calculator" alt="Vue Calculator Screenshot" width="600">
