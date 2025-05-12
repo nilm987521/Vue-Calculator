@@ -9,10 +9,6 @@
 [Demo](http://daniel.pages.nilm.cc/vue-calculator)
 ![thumbnail](img/thumbnail.jpg)
 
-<p align="center">
-  <img src="https://via.placeholder.com/600x400?text=Vue+Calculator" alt="Vue Calculator Screenshot" width="600">
-</p>
-
 ## ✨ 功能特色
 
 - 📱 響應式設計，適配桌面和移動設備
