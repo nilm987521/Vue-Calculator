@@ -19,7 +19,7 @@ check:
   stage: check
   script:
     - echo "執行格式檢查..."
-    - npm prettier --check "src/**/*.{js,vue}"
+    - npx prettier --check "**/*.{js,vue}" 
     - echo "執行代碼規則檢查..."
     - npm run lint
 
@@ -30,7 +30,7 @@ build:
     - check
   script:
     - echo "構建應用..."
-    - npm build
+    - npm run build
   artifacts:
     paths:
       - public/
