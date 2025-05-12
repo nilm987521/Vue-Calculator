@@ -17,8 +17,6 @@ default:
 # 檢查階段
 check:
   stage: check
-  needs:
-    - setup
   script:
     - echo "執行格式檢查..."
     - npm prettier --check "src/**/*.{js,vue}"
