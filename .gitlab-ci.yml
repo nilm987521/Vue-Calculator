@@ -15,13 +15,13 @@ cache:
 check:
   stage: check
   script:
+    - npm ci # 使用 ci(clean install) 而不是 install 以確保一致性安裝
     - npx prettier --check "**/*.{js,vue}"
     - npm run lint
 # 構建階段的工作
 build:
   stage: build
   script:
-    - npm ci # 使用 ci 而不是 install 以確保一致性安裝
     - npm run build
   artifacts:
     paths:
