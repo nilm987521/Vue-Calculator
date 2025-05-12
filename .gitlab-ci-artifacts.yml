@@ -1,0 +1,61 @@
+# Node.js 版本
+image: node:18
+
+# 定義階段
+stages:
+  - setup
+  - verify
+  - build
+  - deploy
+
+# 安裝依賴階段 - 只在這裡執行一次 npm ci
+setup:
+  stage: setup
+  script:
+    - echo "安裝項目依賴..."
+    - npm ci
+    - echo "打包 node_modules 以供後續作業使用..."
+    - tar -czf node_modules.tar.gz node_modules
+  artifacts:
+    paths:
+      - node_modules.tar.gz
+    expire_in: 1 hour  # 設置一個合理的過期時間
+
+# 代碼檢查階段
+verify:
+  stage: verify
+  needs:
+    - setup
+  script:
+    - echo "解壓 node_modules..."
+    - tar -xzf node_modules.tar.gz
+    - echo "執行代碼格式和規則檢查..."
+    - npx prettier --check "**/*.{js,vue}"
+    - npm run lint
+
+# 構建階段
+build:
+  stage: build
+  needs:
+    - setup
+  script:
+    - echo "解壓 node_modules..."
+    - tar -xzf node_modules.tar.gz
+    - echo "構建應用..."
+    - npm run build
+  artifacts:
+    paths:
+      - public/
+
+# 部署到 GitLab Pages
+pages:
+  stage: deploy
+  needs:
+    - build
+  script:
+    - echo "部署到 GitLab Pages..."
+  artifacts:
+    paths:
+      - public/
+  only:
+    - main
