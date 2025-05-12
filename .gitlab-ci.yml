@@ -1,0 +1,32 @@
+# Node.js 版本
+image: node:18
+
+# 定義階段
+stages:
+  - build
+  - deploy
+
+# 快取 node_modules 目錄以加速構建
+cache:
+  paths:
+    - node_modules/
+
+# 構建階段的工作
+build:
+  stage: build
+  script:
+    - npm ci # 使用 ci 而不是 install 以確保一致性安裝
+    - npm run build
+
+# 部署到 GitLab Pages 的工作
+pages:
+  stage: deploy
+  script:
+    - echo "部署到 GitLab Pages"
+  artifacts:
+    paths:
+      - public/ # GitLab Pages 需要 public 目錄
+  only:
+    - main # 只在主分支執行部署
+  needs:
+    - build # 依賴於構建工作
