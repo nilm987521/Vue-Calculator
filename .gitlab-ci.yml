@@ -4,85 +4,57 @@ image: node:18
 # 定義階段
 stages:
   - setup
-  - test
+  - check
   - build
   - deploy
 
 # 全局變量
 variables:
-  # 使用確定性的快取鍵
-  CACHE_KEY: "$CI_COMMIT_REF_SLUG-$CI_JOB_ID-$(md5sum package-lock.json | awk '{ print $1 }')"
+  YARN_CACHE_FOLDER: ".yarn-cache"
 
 # 全局快取配置
 cache:
-  # 使用快取鍵確保依賴的正確版本
-  key: $CACHE_KEY
+  key: ${CI_COMMIT_REF_SLUG}-yarn
   paths:
+    - .yarn-cache/
     - node_modules/
-  policy: pull
+  policy: pull-push
 
-# 依賴安裝階段 - 只有這個階段執行 npm ci
+# 安裝依賴階段
 setup:
   stage: setup
   script:
+    - bash convert-to-yarn.sh 
+    - echo "確認 Yarn 版本..."
+    - yarn --version
     - echo "安裝項目依賴..."
-    - npm ci
-    # 創建一個檔案標記安裝已完成
-    - echo "SETUP_DONE=true" > setup.env
-  # 關鍵：僅這個作業使用 pull-push 策略
-  cache:
-    key: $CACHE_KEY
-    paths:
-      - node_modules/
-    policy: pull-push
-  # 使用環境檔案傳遞狀態
-  artifacts:
-    reports:
-      dotenv: setup.env
-    expire_in: 1 hour
-
-# 代碼檢查階段
-test:
-  stage: test
+    - yarn install --frozen-lockfile --cache-folder $YARN_CACHE_FOLDER
+    - echo "安裝完成，依賴已緩存"
+  
+# 檢查階段
+check:
+  stage: check
   needs:
     - setup
   script:
-    # 檢查依賴是否存在
-    - |
-      if [ -d "node_modules" ] && [ "$SETUP_DONE" = "true" ]; then
-        echo "使用快取的 node_modules..."
-      else
-        echo "錯誤：node_modules 目錄未正確快取" 
-        exit 1
-      fi
     - echo "執行格式檢查..."
-    - npx prettier --check "**/*.{js,vue}"
+    - yarn prettier --check "src/**/*.{js,vue}"
     - echo "執行代碼規則檢查..."
-    - npm run lint
-  # 使用默認的 pull 策略
+    - yarn run lint
 
 # 構建階段
 build:
   stage: build
   needs:
-    - setup
+    - check
   script:
-    # 檢查依賴是否存在
-    - |
-      if [ -d "node_modules" ] && [ "$SETUP_DONE" = "true" ]; then
-        echo "使用快取的 node_modules..."
-      else
-        echo "錯誤：node_modules 目錄未正確快取" 
-        exit 1
-      fi
     - echo "構建應用..."
-    - npm run build
+    - yarn build
   artifacts:
     paths:
       - public/
-  # 使用默認的 pull 策略
 
-# 部署到 GitLab Pages
+# 部署到 GitLab Pages 的工作
 pages:
   stage: deploy
   needs:
