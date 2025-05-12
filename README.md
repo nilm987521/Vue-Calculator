@@ -132,20 +132,7 @@ yarn lint
 
 自動保存計算歷史，允許用戶點擊歷史記錄中的項目重用先前的計算。
 
-## 🤝 貢獻
-
-歡迎貢獻、問題和功能請求！隨時提交 pull request 或創建問題。
-
 ## 📜 許可證
 
 本項目採用 [MIT 許可證](LICENSE)。
 
-## 👨‍💻 作者
-
-- **您的名字** - [您的GitHub](https://github.com/your-username)
-
----
-
-<p align="center">
-  用 ❤️ 和 ☕ 製作
-</p>

@@ -17,6 +17,9 @@ build:
   script:
     - npm ci # 使用 ci 而不是 install 以確保一致性安裝
     - npm run build
+  artifacts:
+    paths:
+      - public/ # Vite 構建後的輸出目錄
 
 # 部署到 GitLab Pages 的工作
 pages:

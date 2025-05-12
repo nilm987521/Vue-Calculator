@@ -2,6 +2,7 @@
   "name": "vue-calculator",
   "version": "0.1.0",
   "private": true,
+  "license": "MIT",
   "scripts": {
     "dev": "vite --force",
     "build": "vite build",
