@@ -1,6 +1,6 @@
 <template>
   <div class="bracket-pad">
-    <FunctionButton 
+    <FunctionButton
       v-for="(func, index) in functions"
       :key="index"
       :func="func"
@@ -16,10 +16,10 @@ import FunctionButton from './FunctionButton.vue';
 export default {
   name: 'BracketPad',
   components: {
-    FunctionButton
+    FunctionButton,
   },
   setup(props, { emit }) {
-    const functions = ["(", ")", "%"];
+    const functions = ['(', ')', '%'];
 
     const handleFunctionClick = (func) => {
       emit('click-function', func);
@@ -27,9 +27,9 @@ export default {
 
     return {
       functions,
-      handleFunctionClick
+      handleFunctionClick,
     };
-  }
+  },
 };
 </script>
 

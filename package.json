@@ -7,7 +7,10 @@
     "dev": "vite --force",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
+    "lint": "eslint --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore .",
+    "lint:vite": "eslint --config .eslintrc-vite.cjs vite.config.js",
+    "format": "prettier --write 'src/**/*.{js,vue,css,scss}'",
+    "format:check": "prettier --check 'src/**/*.{js,vue,css,scss}'",
     "prepare": "husky install"
   },
   "dependencies": {
@@ -51,6 +54,10 @@
     "not ie 11"
   ],
   "lint-staged": {
-    "*.{js,jsx,vue}": "eslint --fix"
+    "*.{js,jsx,vue}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{css,scss,json,md}": "prettier --write"
   }
 }

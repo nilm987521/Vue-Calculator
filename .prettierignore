@@ -1,0 +1,11 @@
+# 構建產物
+/dist/
+/public/
+
+# 依賴
+/node_modules/
+
+# 其他不需要格式化的文件
+*.min.js
+*.svg
+*.md

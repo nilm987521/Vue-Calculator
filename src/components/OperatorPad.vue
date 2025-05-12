@@ -1,6 +1,6 @@
 <template>
   <div class="operator-pad">
-    <FunctionButton 
+    <FunctionButton
       v-for="(func, index) in functions"
       :key="index"
       :func="func"
@@ -17,10 +17,10 @@ import FunctionButton from './FunctionButton.vue';
 export default {
   name: 'OperatorPad',
   components: {
-    FunctionButton
+    FunctionButton,
   },
   setup(props, { emit }) {
-    const functions = ["AC", "÷", "×", "-", "+"];
+    const functions = ['AC', '÷', '×', '-', '+'];
 
     const handleFunctionClick = (func) => {
       emit('click-function', func);
@@ -28,9 +28,9 @@ export default {
 
     return {
       functions,
-      handleFunctionClick
+      handleFunctionClick,
     };
-  }
+  },
 };
 </script>
 

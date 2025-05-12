@@ -1,21 +1,24 @@
-// CommonJS 語法，兼容性更好
-const { defineConfig } = require('vite');
-const vue = require('@vitejs/plugin-vue');
-const path = require('path');
+/* eslint-env node */
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-module.exports = defineConfig({
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+export default defineConfig({
   plugins: [vue()],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src')
-    }
+      '@': path.resolve(__dirname, './src'),
+    },
   },
   build: {
     outDir: 'public',
     minify: 'esbuild',
     minifyOptions: {
       target: 'es2015',
-      drop: ['console', 'debugger']
+      drop: ['console', 'debugger'],
     },
     rollupOptions: {
       output: {
@@ -26,11 +29,11 @@ module.exports = defineConfig({
             return 'css/[name].[hash:8].min.css';
           }
           return 'assets/[name].[hash:8][extname]';
-        }
-      }
+        },
+      },
     },
     sourcemap: false,
-    cssCodeSplit: false
+    cssCodeSplit: false,
   },
-  base: './'
+  base: './',
 });

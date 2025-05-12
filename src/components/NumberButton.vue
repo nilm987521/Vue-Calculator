@@ -1,8 +1,5 @@
 <template>
-  <button 
-    class="btn btn-secondary col-4 shadow number-button" 
-    @click="onClick"
-  >
+  <button class="btn btn-secondary col-4 shadow number-button" @click="onClick">
     {{ number }}
   </button>
 </template>
@@ -16,8 +13,8 @@ export default {
       required: true,
       validator: (value) => {
         return value >= 0 && value <= 9 && Number.isInteger(value);
-      }
-    }
+      },
+    },
   },
   setup(props, { emit }) {
     const onClick = () => {
@@ -25,9 +22,9 @@ export default {
     };
 
     return {
-      onClick
+      onClick,
     };
-  }
+  },
 };
 </script>
 

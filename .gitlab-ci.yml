@@ -3,6 +3,7 @@ image: node:18
 
 # 定義階段
 stages:
+  - check
   - build
   - deploy
 
@@ -11,6 +12,11 @@ cache:
   paths:
     - node_modules/
 
+check:
+  stage: check
+  script:
+    - npx prettier --check "**/*.{js,vue}"
+    - npm run lint
 # 構建階段的工作
 build:
   stage: build

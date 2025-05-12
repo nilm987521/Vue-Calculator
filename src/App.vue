@@ -30,10 +30,10 @@
           <div class="col-9 p-0">
             <!-- "(", ")", "%" -->
             <BracketPad @click-function="FuncBtnClick" />
-            
+
             <!-- [0 - 9] -->
             <NumberPad @click-number="NumBtnClick" />
-            
+
             <!-- ".", "=" -->
             <EqualPad @click-function="FuncBtnClick" />
           </div>
@@ -48,24 +48,24 @@
 </template>
 
 <script>
-import { ref } from "vue";
-import { Decimal } from "decimal.js";
-import NumberPad from "./components/NumberPad.vue";
-import BracketPad from "./components/BracketPad.vue";
-import OperatorPad from "./components/OperatorPad.vue";
-import EqualPad from "./components/EqualPad.vue";
+import { ref } from 'vue';
+import { Decimal } from 'decimal.js';
+import NumberPad from './components/NumberPad.vue';
+import BracketPad from './components/BracketPad.vue';
+import OperatorPad from './components/OperatorPad.vue';
+import EqualPad from './components/EqualPad.vue';
 
 export default {
-  name: "CalculatorApp",
+  name: 'CalculatorApp',
   components: {
     NumberPad,
     BracketPad,
     OperatorPad,
-    EqualPad
+    EqualPad,
   },
   setup() {
     // variables
-    const Statement = ref("0");
+    const Statement = ref('0');
     var HasGetResult = false;
     const ResultArr = ref([]);
 
@@ -80,16 +80,16 @@ export default {
     // 數字按鍵觸發的 function
     const NumBtnClick = (num) => {
       if (HasGetResult === true) {
-        Statement.value = "";
+        Statement.value = '';
         HasGetResult = false;
       }
       if (num == 0) {
-        if (Statement.value === "0") {
+        if (Statement.value === '0') {
           return;
         }
       } else {
-        if (Statement.value === "0") {
-          Statement.value = "";
+        if (Statement.value === '0') {
+          Statement.value = '';
         }
       }
       Statement.value = Statement.value + num;
@@ -98,19 +98,19 @@ export default {
     // 功能按鍵觸發的 function
     const FuncBtnClick = (func) => {
       switch (func) {
-        case "AC":
-          Statement.value = "0";
+        case 'AC':
+          Statement.value = '0';
           return;
-        case ".":
+        case '.':
           HasGetResult = false;
           var ErrReg = /\d+[.]+\d+[.]/g;
           if (isNaN(Statement.value.slice(-1))) {
             return;
-          } else if (ErrReg.test(Statement.value + ".")) {
+          } else if (ErrReg.test(Statement.value + '.')) {
             return;
           }
           break;
-        case ")":
+        case ')':
           var LeftPairCount;
           var RightPairCount;
           if (Statement.value.match(/\(/g) !== null) {
@@ -127,13 +127,13 @@ export default {
             return;
           }
           break;
-        case "(":
-          if (Statement.value === "0") {
-            Statement.value = "";
+        case '(':
+          if (Statement.value === '0') {
+            Statement.value = '';
           }
           HasGetResult = false;
           break;
-        case "=":
+        case '=':
           var stmt = Statement.value;
           Statement.value = PairLoop(Statement.value);
           Statement.value = PercentLoop(Statement.value);
@@ -146,11 +146,11 @@ export default {
         default:
           HasGetResult = false;
           if (ChangeOperatReg.test(Statement.value)) {
-            Statement.value = Statement.value.replace(ChangeOperatReg, "");
+            Statement.value = Statement.value.replace(ChangeOperatReg, '');
           }
-          if (func === "-" && Statement.value === "0") {
-            Statement.value = "";
-          } else if (func !== "-" && Statement.value === "0") {
+          if (func === '-' && Statement.value === '0') {
+            Statement.value = '';
+          } else if (func !== '-' && Statement.value === '0') {
             return;
           }
           break;
@@ -188,10 +188,7 @@ export default {
       let thisStmt = stmt;
       while (PercentReg.test(thisStmt)) {
         let stmtArr = thisStmt.match(PercentReg);
-        thisStmt = thisStmt.replace(
-          stmtArr[0],
-          (parseFloat(stmtArr[1]) / 100).toString()
-        );
+        thisStmt = thisStmt.replace(stmtArr[0], (parseFloat(stmtArr[1]) / 100).toString());
       }
       return thisStmt;
     }
@@ -200,10 +197,7 @@ export default {
     function MDLoop(stmt) {
       while (MDReg.test(stmt)) {
         let stmtArr = stmt.match(MDReg);
-        stmt = stmt.replace(
-          stmtArr[0],
-          MultiplyAndDivided(stmtArr[1], stmtArr[2], stmtArr[3])
-        );
+        stmt = stmt.replace(stmtArr[0], MultiplyAndDivided(stmtArr[1], stmtArr[2], stmtArr[3]));
       }
       return stmt;
     }
@@ -212,10 +206,7 @@ export default {
     function PSLoop(stmt) {
       while (PSReg.test(stmt)) {
         let stmtArr = stmt.match(PSReg);
-        stmt = stmt.replace(
-          stmtArr[0],
-          PlusAndSubtract(stmtArr[1], stmtArr[2], stmtArr[3])
-        );
+        stmt = stmt.replace(stmtArr[0], PlusAndSubtract(stmtArr[1], stmtArr[2], stmtArr[3]));
       }
       return stmt;
     }
@@ -224,12 +215,12 @@ export default {
     function MultiplyAndDivided(a, x, b) {
       let result;
       switch (x) {
-        case "×":
-        case "*":
+        case '×':
+        case '*':
           result = new Decimal(a).times(new Decimal(b)).toNumber();
           break;
-        case "÷":
-        case "/":
+        case '÷':
+        case '/':
           result = Decimal.div(a, b).toNumber();
           break;
       }
@@ -240,10 +231,10 @@ export default {
     function PlusAndSubtract(a, x, b) {
       let result;
       switch (x) {
-        case "+":
+        case '+':
           result = Decimal.add(a, b).toNumber();
           break;
-        case "-":
+        case '-':
           result = Decimal.sub(a, b).toNumber();
           break;
       }
